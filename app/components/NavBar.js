@@ -11,7 +11,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 // import ShareIcon from '@material-ui/icons/Share';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 // import SettingsIcon from '@material-ui/icons/Settings';
-import { moduleCount } from '../constants/device.json';
+import { moduleCount, COM } from '../constants/device.json';
 
 const fs = require('fs');
 const path = require('path');
@@ -96,7 +96,7 @@ export default function NavBar(props: Props) {
 
     try {
       childProcess.execSync(
-        `arduino-cli upload -p COM5 --fqbn arduino:avr:uno ${arduinoPath}`
+        `arduino-cli upload -p ${COM} --fqbn arduino:avr:uno ${arduinoPath}`
       );
     } catch (error) {
       console.log(error);
