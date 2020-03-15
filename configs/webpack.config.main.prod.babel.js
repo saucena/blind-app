@@ -9,19 +9,17 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
-import DeleteSourceMaps from '../internals/scripts/DeleteSourceMaps';
 
 CheckNodeEnv('production');
-DeleteSourceMaps();
 
 export default merge.smart(baseConfig, {
-  devtool: process.env.DEBUG_PROD === 'true' ? 'source-map' : 'none',
+  devtool: 'source-map',
 
   mode: 'production',
 
   target: 'electron-main',
 
-  entry: './app/main.dev.ts',
+  entry: './app/main.dev',
 
   output: {
     path: path.join(__dirname, '..'),
@@ -59,8 +57,7 @@ export default merge.smart(baseConfig, {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
       DEBUG_PROD: false,
-      START_MINIMIZED: false,
-      E2E_BUILD: false
+      START_MINIMIZED: false
     })
   ],
 
