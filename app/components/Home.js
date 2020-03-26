@@ -110,48 +110,43 @@ const validate = (text, step) => {
         value = mexp.eval(tmpExpression);
       } catch (error) {
         console.log(error);
-        axesOutput.isValid = false;
-        // break;
-      }
-      if (value === 'Infinity') {
-        axesOutput.isValid = false;
-        // break;
+        // axesOutput.isValid = false;
       }
       axesOutput.y.push(value);
     }
   } else axesOutput.isValid = false;
 
-  // if (!axesOutput.isValid) {
-  //   axesOutput.x = [];
-  //   axesOutput.y = [];
-  //   axesOutput.unscaled = [];
-  // } else {
-  //   // console.log(axesOutput.isValid);
+  if (!axesOutput.isValid) {
+    axesOutput.x = [];
+    axesOutput.y = [];
+    axesOutput.unscaled = [];
+  } else {
+    // console.log(axesOutput.isValid);
 
-  const max = Math.max(
-    ...axesOutput.y.filter(
-      x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
-    )
-  );
-  const min = Math.min(
-    ...axesOutput.y.filter(
-      x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
-    )
-  );
+    const max = Math.max(
+      ...axesOutput.y.filter(
+        x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
+      )
+    );
+    const min = Math.min(
+      ...axesOutput.y.filter(
+        x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
+      )
+    );
 
-  axesOutput.y = axesOutput.y.map(x => {
-    if (isNaN(x) || x == null || x == '-Infinity' || x == 'Infinity') {
-      return min;
-    }
-    return x;
-  });
+    axesOutput.y = axesOutput.y.map(x => {
+      if (isNaN(x) || x == null || x == '-Infinity' || x == 'Infinity') {
+        return min;
+      }
+      return x;
+    });
 
-  axesOutput.isValid = true;
+    // axesOutput.isValid = true;
 
-  axesOutput.unscaled = axesOutput.y;
+    axesOutput.unscaled = axesOutput.y;
 
-  axesOutput.y = mapRange(axesOutput.y, min, max, 0, 100);
-  // }
+    axesOutput.y = mapRange(axesOutput.y, min, max, 0, 100);
+  }
   return axesOutput;
 };
 
