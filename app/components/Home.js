@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-plusplus */
 /* eslint react/prop-types: 0 */
@@ -69,14 +72,11 @@ const validate = (text, step) => {
   // ensure 2x => 2*x
   const expression = text.replace(/ /g, '');
   let expSplit = expression.split('x');
-  // console.log(expSplit);
   expSplit = expSplit.map((x, i) => {
     const lastChar = x.charAt(x.length - 1);
     const num = Number.parseInt(lastChar, 10);
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(num) && i < x.length - 2) {
-      // console.log(i);
-      // console.log(x.length);
       // eslint-disable-next-line no-param-reassign
       x += '*';
     }
@@ -92,6 +92,7 @@ const validate = (text, step) => {
 
   if (step > 0) {
     let tmpExpression;
+
     console.log(expSplit.join('x'));
     for (
       let i = -Math.floor(moduleCount / 2);
@@ -110,33 +111,47 @@ const validate = (text, step) => {
       } catch (error) {
         console.log(error);
         axesOutput.isValid = false;
-        break;
+        // break;
       }
       if (value === 'Infinity') {
         axesOutput.isValid = false;
-        break;
+        // break;
       }
       axesOutput.y.push(value);
     }
   } else axesOutput.isValid = false;
 
-  if (!axesOutput.isValid) {
-    axesOutput.x = [];
-    axesOutput.y = [];
-    axesOutput.unscaled = [];
-  } else {
-    // console.log(axesOutput.isValid);
+  // if (!axesOutput.isValid) {
+  //   axesOutput.x = [];
+  //   axesOutput.y = [];
+  //   axesOutput.unscaled = [];
+  // } else {
+  //   // console.log(axesOutput.isValid);
 
-    axesOutput.unscaled = axesOutput.y;
+  const max = Math.max(
+    ...axesOutput.y.filter(
+      x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
+    )
+  );
+  const min = Math.min(
+    ...axesOutput.y.filter(
+      x => !isNaN(x) && x != null && x != 'Infinity' && x != '-Infinity'
+    )
+  );
 
-    const max = Math.max(...axesOutput.y);
-    const min = Math.min(...axesOutput.y);
+  axesOutput.y = axesOutput.y.map(x => {
+    if (isNaN(x) || x == null || x == '-Infinity' || x == 'Infinity') {
+      return min;
+    }
+    return x;
+  });
 
-    // console.log(min);
-    // console.log(max);
+  axesOutput.isValid = true;
 
-    axesOutput.y = mapRange(axesOutput.y, min, max, 0, 100);
-  }
+  axesOutput.unscaled = axesOutput.y;
+
+  axesOutput.y = mapRange(axesOutput.y, min, max, 0, 100);
+  // }
   return axesOutput;
 };
 
